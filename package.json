@@ -1,0 +1,52 @@
+{
+  "name": "skutil-express",
+  "version": "1.0.0",
+  "description": "A further encapsulation of express app, support convenient route definition.",
+  "license": "MIT",
+  "author": "stayknight",
+  "keywords": [
+    "skutil",
+    "express"
+  ],
+  "files": [
+    "README.md",
+    "src",
+    "index.js",
+    "index.d.ts"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --fix --ext .js .",
+    "test": "mocha --recursive",
+    "coverage": "nyc yarn test"
+  },
+  "dependencies": {
+    "ajv": "^8.11.2",
+    "ajv-formats": "^2.1.1",
+    "express": "^4.17.3",
+    "express-async-support": "^1.0.0",
+    "http-errors": "^2.0.0",
+    "lodash": "^4.17.21",
+    "lodash.clonedeepwith": "^4.5.0",
+    "lodash.isfunction": "^3.0.9",
+    "merge-descriptors": "^1.0.1",
+    "methods": "^1.1.2",
+    "on-finished": "^2.4.1",
+    "skutil": "^1.2.0",
+    "skutil-express-jwt": "^1.2.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "body-parser": "^1.20.1",
+    "chai": "^4.2.0",
+    "eslint": "^7.16.0",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "supertest": "^6.2.2"
+  },
+  "typings": "index.d.ts",
+  "engines": {
+    "node": ">=12"
+  }
+}
