@@ -14,8 +14,6 @@ import { SignOptions, VerifyOptions } from 'jsonwebtoken'
 /**
  * Creates an Express application. The express() function is a top-level function exported by the express module.
  */
-declare function e(): express.Express;
-
 declare namespace e {
     type SignOpts = SignOptions;
     type VerifyOpts = {
@@ -61,5 +59,6 @@ declare namespace e {
         loadControllers: (path: string) => undefined;
     }
 }
+declare function e(): e.Express;
 
 export = e;
