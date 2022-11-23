@@ -38,7 +38,7 @@ declare namespace e {
 
         /**
          * The jwt is required by the controller's implementation, and thus need to be initiallized from the app
-         * and a sign method is required too.abs
+         * and a sign method is required too
          * */
         initJWT(secret: string, signOpts?: SignOpts, verifyOpts?: VerifyOpts): undefined;
 
