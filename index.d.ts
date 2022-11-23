@@ -36,7 +36,13 @@ declare namespace e {
     
     interface Express extends express.Express {
 
+        /**
+         * The jwt is required by the controller's implementation, and thus need to be initiallized from the app
+         * and a sign method is required too.abs
+         * */
         initJWT(secret: string, signOpts?: SignOpts, verifyOpts?: VerifyOpts): undefined;
+
+        jwtSign(payload: string | Buffer | object, signOpts?: SignOpts): string;
 
         /**
          * @param port http listen port

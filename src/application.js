@@ -42,6 +42,10 @@ appExtend.initJWT = function(secret, signOpts, verifyOpts) {
   this.set(JWT_APPEND_REQUEST_PROP, verifyOpts.requestProperty)
 }
 
+appExtend.jwtSign = function(payload, signOpts) {
+  jwtUtil.sign(payload, signOpts)
+}
+
 appExtend.startServe = function(port) {
   this.useLastMiddlewares()
   const server = http.createServer(this)
