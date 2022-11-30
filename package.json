@@ -1,6 +1,6 @@
 {
   "name": "skutil-express",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A further encapsulation of express app, support convenient route definition.",
   "license": "MIT",
   "author": "stayknight",
@@ -48,5 +48,13 @@
   "typings": "index.d.ts",
   "engines": {
     "node": ">=12"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stayknight/skutil-express.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stayknight/skutil-express/issues"
+  },
+  "homepage": "https://github.com/stayknight/skutil-express#readme"
 }

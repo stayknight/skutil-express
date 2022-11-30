@@ -108,6 +108,44 @@ module.exports = {
 }
 ```
 
+## Express extended functions
+
+```typescript
+  interface Express extends express.Express {
+    /**
+     * The jwt is required by the controller's implementation, and thus need to be initiallized from the app
+     * The default algorithm is HS256
+     * @param secret
+     * @param signOpts the sign options supported by jsonwebtoken, such as `expiresIn`
+     * @param verifyOpts the verify options supported by express-jwt, such as `requestProperty`
+     * */
+    initJWT(secret: string, signOpts?: SignOptions, verifyOpts?: VerifyOpts): undefined;
+
+    /**
+     * The jwt sign method to get a token. Use the default sign options from `initJWT` and merged with the options provided.
+     * @param payload 
+     * @param signOpts 
+     */
+    jwtSign(payload: string | Buffer | object, signOpts?: SignOpts): string;
+
+    /**
+     * @param port http listen port
+     */
+    startServe: (port: number) => undefined;
+
+    /**
+     * @param key the key of fetched user authorizaton data appending to request
+     * @param fn the function to fetch user authorizaton data. the in param `jwtAuth` is the decoded data from jwt
+     */
+    setUserAuth: (key: string, fn: (jwtAuth: object) => UserAuthorization | Promise<UserAuthorization>) => undefined;
+
+    /**
+     * @param path directory of controllers
+     */
+    loadControllers: (path: string) => undefined;
+  }
+```
+
 ## Controller explaination
 
 1. Controller files are loaded recursively
@@ -123,6 +161,18 @@ module.exports = {
   - `permissions`: Array<string>. The keys of permissions allowed to access. if `permissions` is used, then the function provided by `app.setUserAuth` must return the permissions assigned to the user, or the authorization will fail. 
   - `handler`: the function handling the request in format. async function and error thrown are supported. the result returned by the handler will be send to the client.
     * the default response body is in json format of `{ code, message, data }`, the result of function return is the data part.
+  - `midwares:` The additional middlewares of express.
+
+4. The fields of a controller route take effect in the order of `jwt -> roles/permissions -> midwares -> schema/querySchema/paramsSchema/bodySchema ->handler`. Once a part throws an error, the process stops and a http error response is returned to the client. The default error response body is in json form of `{ code, message }`. The suggested error module used in your application is the well-known `http-errors` package.
+
+
+## Resonse and Errors
+
+1. The default success/error response is in json format of `{ code, message, data }`. 
+  - `code` is generally the same as `statusCode`. You can also specify a custom code in errors through a `customCode` or `code` field. If you use a `code` field in errors for custom code, then a `statusCode` or `status` field can be used to specify the statusCode.
+  - `message` is the message of the error, or `ok`.
+  - `data` is the result of the `handler` function return. An error response has no data field.
+  - A string thrown is also allowed, in which case the statusCode would be 500.
 
 ## Maintainers
 

@@ -30,16 +30,23 @@ declare namespace e {
         roles?: Array<string>;
         permissions?: Array<string>;
     }
-    type FetchUserAuthorization = () => UserAuthorization | Promise<UserAuthorization>;
-    
+
     interface Express extends express.Express {
 
         /**
          * The jwt is required by the controller's implementation, and thus need to be initiallized from the app
-         * and a sign method is required too
+         * The default algorithm is HS256
+         * @param secret
+         * @param signOpts the sign options supported by jsonwebtoken, such as `expiresIn`
+         * @param verifyOpts the verify options supported by express-jwt, such as `requestProperty`
          * */
-        initJWT(secret: string, signOpts?: SignOpts, verifyOpts?: VerifyOpts): undefined;
+        initJWT(secret: string, signOpts?: SignOptions, verifyOpts?: VerifyOpts): undefined;
 
+        /**
+         * The jwt sign method to get a token. Use the default sign options from `initJWT` and merged with the options provided.
+         * @param payload 
+         * @param signOpts 
+         */
         jwtSign(payload: string | Buffer | object, signOpts?: SignOpts): string;
 
         /**
@@ -49,9 +56,9 @@ declare namespace e {
 
         /**
          * @param key the key of fetched user authorizaton data appending to request
-         * @param fn the function to fetch user authorizaton data
+         * @param fn the function to fetch user authorizaton data. the in param `jwtAuth` is the decoded data from jwt
          */
-        setUserAuth: (key: string, fn: FetchUserAuthorization) => undefined;
+        setUserAuth: (key: string, fn: (jwtAuth: object) => UserAuthorization | Promise<UserAuthorization>) => undefined;
 
         /**
          * @param path directory of controllers

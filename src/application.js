@@ -46,10 +46,17 @@ appExtend.jwtSign = function(payload, signOpts) {
   jwtUtil.sign(payload, signOpts)
 }
 
-appExtend.startServe = function(port) {
+appExtend.listen = function() {
   this.useLastMiddlewares()
   const server = http.createServer(this)
-  server.listen(port)
+  server.listen.apply(server, arguments)
+  return server
+}
+
+appExtend.startServe = function() {
+  this.useLastMiddlewares()
+  const server = http.createServer(this)
+  server.listen.apply(server, arguments)
   server.on('listening', () => {
     const addr = server.address()
     console.debug(`server is listening on ${addr.address}:${addr.port}`)
@@ -62,6 +69,7 @@ appExtend.startServe = function(port) {
       throw error
     }
     // handle specific listen errors with friendly messages
+    const port = arguments[0]
     switch (error.code) {
       case 'EACCES':
         console.error(`Port ${port} requires elevated privileges`)
