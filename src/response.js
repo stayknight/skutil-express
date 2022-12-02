@@ -1,4 +1,5 @@
 const httpError = require('http-errors')
+const statuses = require('statuses')
 
 module.exports = {
   sendOk,
@@ -23,8 +24,8 @@ function sendError(res, error) {
     customCode = statusCode
     message = error.message
   } else if (typeof error === 'object') {
-    statusCode = error.statusCode || error.status || error.code || 500
-    customCode = error.customCode || error.code || statusCode
+    statusCode = getStatusCodeFromError(error, 500)
+    customCode = getCustomCodeFromError(error, statusCode)
     if (statusCode < 500) {
       message = error.message
     }
@@ -32,4 +33,23 @@ function sendError(res, error) {
     message = error
   }
   res.status(statusCode).json({ code: customCode, message })
+}
+
+function getStatusCodeFromError(error, defaultCode) {
+  if (error.statusCode) return error.statusCode
+  if (error.status && statuses.codes.indexOf(error.status) !== -1) {
+    return error.status
+  }
+  if (error.code && statuses.codes.indexOf(error.code) !== -1) {
+    return error.code
+  }
+  return defaultCode
+}
+
+function getCustomCodeFromError(error, defaultCode) {
+  if (error.customCode) return error.customCode
+  if (typeof error.code === 'number') {
+    return error.code
+  }
+  return defaultCode
 }
